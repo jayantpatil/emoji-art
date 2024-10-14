@@ -25,7 +25,7 @@ struct PaletteChooser: View {
             AnimatedActionButton("New", systemImage: "plus") {
                 store.insert(Palette(name: "Math", emojis: "✖️⟦♾️➗➖➕"))
             }
-            AnimatedActionButton("Deleted", systemImage: "minus.circle", role: .destructive) {
+            AnimatedActionButton("Delete", systemImage: "minus.circle", role: .destructive) {
                 store.palettes.remove(at: store.cursorIndex)
             }
         }
