@@ -38,6 +38,7 @@
 		9FCDF02E2CB311C400B8695B /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		9FE82C1A2CBE19F80092C258 /* PaletteList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteList.swift; sourceTree = "<group>"; };
 		9FE82C1C2CBE2FA10092C258 /* PaletteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteManager.swift; sourceTree = "<group>"; };
+		9FF431CA2CC16F9800B3FF38 /* Emoji-Art-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Emoji-Art-Info.plist"; sourceTree = SOURCE_ROOT; };
 		9FF463D52CBBF6B900D87EE9 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		9FF463D72CBBF9B900D87EE9 /* PaletteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteStore.swift; sourceTree = "<group>"; };
 		9FF463D92CBBFD8900D87EE9 /* PaletteChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteChooser.swift; sourceTree = "<group>"; };
@@ -73,6 +74,7 @@
 		9FCDF0192CB304A100B8695B /* Emoji Art */ = {
 			isa = PBXGroup;
 			children = (
+				9FF431CA2CC16F9800B3FF38 /* Emoji-Art-Info.plist */,
 				9FCDF01A2CB304A100B8695B /* Emoji_ArtApp.swift */,
 				9FCDF01C2CB304A100B8695B /* ContentView.swift */,
 				9FCDF0282CB305C400B8695B /* EmojiArt.swift */,
@@ -319,11 +321,13 @@
 				DEVELOPMENT_TEAM = 389J6GVZC3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Emoji-Art-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -348,11 +352,13 @@
 				DEVELOPMENT_TEAM = 389J6GVZC3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Emoji-Art-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

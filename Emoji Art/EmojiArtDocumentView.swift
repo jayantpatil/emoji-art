@@ -8,10 +8,15 @@
 import SwiftUI
 
 struct EmojiArtDocumentView: View {
+    @Environment(\.undoManager) var undoManager
+
+    @StateObject var paletteStore = PaletteStore(named: "Shared")
+
     typealias Emoji = EmojiArt.Emoji
+
     @ObservedObject var document: EmojiArtDocument
 
-    private let paletteEmojiSize: CGFloat = 40
+    @ScaledMetric var paletteEmojiSize: CGFloat = 40
 
     var body: some View {
         VStack(spacing: 0) {
@@ -20,6 +25,10 @@ struct EmojiArtDocumentView: View {
                 .font(.system(size: paletteEmojiSize))
                 .padding(.horizontal)
                 .scrollIndicators(.hidden)
+        }
+        .environmentObject(paletteStore)
+        .toolbar {
+            UndoButton()
         }
     }
 
@@ -42,7 +51,7 @@ struct EmojiArtDocumentView: View {
                 zoomToFit(document.bbox, in: geometry)
             }
             .dropDestination(for: Sturldata.self) { sturldatas, location in
-                drop(sturldatas, at: location, in: geometry)
+                return drop(sturldatas, at: location, in: geometry)
             }
             .onChange(of: document.background.failureReason) { reason in
                 showBackgroundFailureAlert = (reason != nil)
@@ -50,15 +59,17 @@ struct EmojiArtDocumentView: View {
             .onChange(of: document.background.uiImage) { uiImage in
                 zoomToFit(uiImage?.size, in: geometry)
             }
-            .alert("Set Background",
-                   isPresented: $showBackgroundFailureAlert,
-                   presenting: document.background.failureReason,
-                   actions: { reason in
-                Button("Ok", role: .cancel) {}
-            },
-                   message: { reason in
-                Text(reason)
-            })
+            .alert(
+                "Set Background",
+                isPresented: $showBackgroundFailureAlert,
+                presenting: document.background.failureReason,
+                actions: { reason in
+                    Button("OK", role: .cancel) { }
+                },
+                message: { reason in
+                    Text(reason)
+                }
+            )
         }
     }
 
@@ -84,6 +95,20 @@ struct EmojiArtDocumentView: View {
     }
 
     @State private var showBackgroundFailureAlert = false
+
+    @ViewBuilder
+    private func documentContents(in geometry: GeometryProxy) -> some View {
+        if let uiImage = document.background.uiImage {
+            Image(uiImage: uiImage)
+                .position(Emoji.Position.zero.in(geometry))
+        }
+        ForEach(document.emojis) { emoji in
+            Text(emoji.string)
+                .font(emoji.font)
+                .position(emoji.position.in(geometry))
+        }
+    }
+
     @State private var zoom: CGFloat = 1
     @State private var pan: CGOffset = .zero
 
@@ -102,45 +127,31 @@ struct EmojiArtDocumentView: View {
 
     private var panGesture: some Gesture {
         DragGesture()
-            .updating($gesturePan) { value, gesturePan, _ in
-                gesturePan = value.translation
+            .updating($gesturePan) { inMotionDragGestureValue, gesturePan, _ in
+                gesturePan = inMotionDragGestureValue.translation
             }
-            .onEnded { value in
-                pan += value.translation
+            .onEnded { endingDragGestureValue in
+                pan += endingDragGestureValue.translation
             }
-    }
-
-    @ViewBuilder
-    private func documentContents(in geometry: GeometryProxy) -> some View {
-        if let uiImage = document.background.uiImage {
-            Image(uiImage: uiImage)
-                .position(Emoji.Position.zero.in(geometry))
-        }
-        ForEach(document.emojis) { emoji in
-            Text(emoji.string)
-                .font(emoji.font)
-                .position(emoji.position.in(geometry))
-        }
     }
 
     private func drop(_ sturldatas: [Sturldata], at location: CGPoint, in geometry: GeometryProxy) -> Bool {
         for sturldata in sturldatas {
             switch sturldata {
-            case .string(let string):
-                document.addEmoji(
-                    string,
-                    at: emojiPosition(at: location, in: geometry),
-                    size: paletteEmojiSize / zoom)
-
-            case .url(let uRL):
-                document.setBackground(uRL)
+            case .url(let url):
+                document.setBackground(url, undoWith: undoManager)
                 return true
-
+            case .string(let emoji):
+                document.addEmoji(
+                    emoji,
+                    at: emojiPosition(at: location, in: geometry),
+                    size: paletteEmojiSize / zoom,
+                    undoWith: undoManager
+                )
+                return true
             default:
                 break
             }
-
-            return true
         }
         return false
     }
@@ -149,11 +160,14 @@ struct EmojiArtDocumentView: View {
         let center = geometry.frame(in: .local).center
         return Emoji.Position(
             x: Int((location.x - center.x - pan.width) / zoom),
-            y: Int(-(location.y - center.y - pan.height) / zoom))
+            y: Int(-(location.y - center.y - pan.height) / zoom)
+        )
     }
 }
 
-#Preview {
-    EmojiArtDocumentView(document: EmojiArtDocument())
-        .environmentObject(PaletteStore(named: "Preview"))
+struct EmojiArtDocumentView_Previews: PreviewProvider {
+    static var previews: some View {
+        EmojiArtDocumentView(document: EmojiArtDocument())
+            .environmentObject(PaletteStore(named: "Preview"))
+    }
 }
